@@ -26,63 +26,51 @@ def carregar_dados_iniciais() -> tuple[Dict, Dict, List[dict]]:
 
 
 def sincronizar_pendentes(conexao, observacoes: List[dict]) -> None:
-    """Tenta sincronizar observações pendentes com o Oracle."""
+    """Sincroniza mercados, produtos e observações locais com o banco Oracle."""
 
-    alterado = False
-    # Carrega produtos e mercados locais
+    # Carrega dados locais
     produtos = arquivos.carregar_json(DATA_DIR / "produtos.json", {})
     mercados = arquivos.carregar_json(DATA_DIR / "mercados.json", {})
+    observacoes = arquivos.carregar_json(DATA_DIR / "observacoes.json", [])
+
+    # Sincroniza mercados
+    for nome, dados in mercados.items():
+        try:
+            db.inserir_mercado_oracle(conexao, nome, dados.get("tipo", ""))
+        except Exception as exc:
+            arquivos.registrar_log("SYNC_MERCADO", "ERRO", f"{nome}: {exc}", nivel="WARN")
+
+    # Sincroniza produtos
+    for codigo, dados in produtos.items():
+        try:
+            db.inserir_produto_oracle(conexao, codigo, dados.get("nome", ""), dados.get("categoria", ""))
+        except Exception as exc:
+            arquivos.registrar_log("SYNC_PRODUTO", "ERRO", f"{codigo}: {exc}", nivel="WARN")
+
+    # Sincroniza observações (registros de preço)
     for obs in observacoes:
-        if not obs.get("pendente_sync"):
-            continue
-        tentativas = 0
-        while tentativas < 3:
-            try:
-                produto_id, mercado_id = db.obter_ids(conexao, obs["produto"], obs["mercado"])
-                registro = {
-                    "data_ref": datetime.strptime(obs["data_ref"], "%Y-%m-%d").date(),
-                    "product_id": produto_id,
-                    "market_id": mercado_id,
-                    "tipo_preco": obs["tipo_preco"],
-                    "unidade_original": obs["unidade_original"],
-                    "preco_original": obs["preco_original"],
-                    "preco_kg": obs["preco_kg"],
-                    "fonte": obs["fonte"],
-                }
-                db.inserir_preco_oracle(conexao, registro)
-                obs["pendente_sync"] = False
-                alterado = True
-                arquivos.registrar_log("SYNC_PENDENTE", "SUCESSO", f"{obs['produto']} {obs['data_ref']}")
-                break
-            except ValueError as exc:
-                msg = str(exc)
-                if "Produto não encontrado" in msg:
-                    # Tenta cadastrar produto
-                    prod = produtos.get(obs["produto"], {"nome": obs["produto"], "categoria": None})
-                    try:
-                        db.inserir_produto_oracle(conexao, obs["produto"], prod.get("nome", obs["produto"]), prod.get("categoria"))
-                        arquivos.registrar_log("SYNC_PENDENTE", "INFO", f"Produto '{obs['produto']}' cadastrado no Oracle.")
-                    except Exception as exc2:
-                        arquivos.registrar_log("SYNC_PENDENTE", "ERRO", f"Falha ao cadastrar produto '{obs['produto']}': {exc2}", nivel="WARN")
-                        break
-                elif "Mercado não encontrado" in msg:
-                    # Tenta cadastrar mercado
-                    mercado = mercados.get(obs["mercado"], {"tipo": "ATACADO"})
-                    try:
-                        db.inserir_mercado_oracle(conexao, obs["mercado"], mercado.get("tipo", "ATACADO"))
-                        arquivos.registrar_log("SYNC_PENDENTE", "INFO", f"Mercado '{obs['mercado']}' cadastrado no Oracle.")
-                    except Exception as exc2:
-                        arquivos.registrar_log("SYNC_PENDENTE", "ERRO", f"Falha ao cadastrar mercado '{obs['mercado']}': {exc2}", nivel="WARN")
-                        break
-                else:
-                    arquivos.registrar_log("SYNC_PENDENTE", "ERRO", msg, nivel="WARN")
-                    break
-                tentativas += 1
-            except Exception as exc:
-                arquivos.registrar_log("SYNC_PENDENTE", "ERRO", str(exc), nivel="WARN")
-                break
-    if alterado:
-        arquivos.salvar_json(DATA_DIR / "observacoes.json", observacoes)
+        try:
+            produto_id, mercado_id = db.obter_ids(conexao, obs["produto"], obs["mercado"])
+            registro = {
+                "data_ref": obs["data_ref"],
+                "product_id": produto_id,
+                "market_id": mercado_id,
+                "tipo_preco": obs["tipo_preco"],
+                "unidade_original": obs["unidade_original"],
+                "preco_original": obs["preco_original"],
+                "preco_kg": obs["preco_kg"],
+                "fonte": obs["fonte"],
+            }
+            db.inserir_preco_oracle(conexao, registro)
+        except Exception as exc:
+            arquivos.registrar_log("SYNC_PRECO", "ERRO", f"{obs.get('produto', '')}: {exc}", nivel="WARN")
+
+    # Limpa arquivos locais após sincronização
+    arquivos.salvar_json(DATA_DIR / "produtos.json", {})
+    arquivos.salvar_json(DATA_DIR / "mercados.json", {})
+    arquivos.salvar_json(DATA_DIR / "observacoes.json", [])
+
+    arquivos.registrar_log("SYNC_FINALIZADA", "SUCESSO", "Pendentes sincronizados e arquivos limpos.")
 
 
 def registrar_preco(
@@ -242,10 +230,22 @@ def cadastrar_mercado(mercados: Dict, conexao) -> None:
             print("Aviso: não foi possível sincronizar com Oracle agora.")
 
 
-def consultar_historico(historico: List[dict], filtros: Optional[Dict] = None) -> List[dict]:
-    """Retorna registros do histórico aplicando filtros locais."""
+def consultar_historico(historico: List[dict], filtros: Optional[Dict] = None, conexao=None) -> List[dict]:
+    """Consulta registros no Oracle se houver conexão, senão filtra localmente."""
 
     filtros = filtros or {}
+    if conexao is not None:
+        try:
+            registros = db.consultar_oracle(conexao, filtros)
+            # Ajusta datas para datetime.date e mantém compatibilidade com o restante do código
+            for registro in registros:
+                if isinstance(registro["data_ref"], str):
+                    registro["data_ref"] = datetime.strptime(registro["data_ref"], "%Y-%m-%d").date()
+            return registros
+        except Exception as exc:
+            arquivos.registrar_log("CONSULTA_ORACLE", "ERRO", str(exc), nivel="WARN")
+            print("Erro ao consultar Oracle. Exibindo registros locais.")
+    # Consulta local
     registros = []
     for registro in historico:
         if filtros.get("produto") and registro["produto"] != filtros["produto"]:
@@ -381,7 +381,7 @@ def main() -> None:
                 filtros["mercado"] = mercado
             if tipo:
                 filtros["tipo_preco"] = tipo
-            registros_filtrados = consultar_historico(historico, filtros)
+            registros_filtrados = consultar_historico(historico, filtros, conexao)
             ultima_consulta, ultima_alerta = exibir_consulta(registros_filtrados)
         elif opcao == "5":
             if not ultima_consulta:

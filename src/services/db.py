@@ -75,13 +75,13 @@ def consultar_oracle(conn, filtros: Dict) -> List[Dict[str, Any]]:
     """Consulta registros em ``PRICES`` com filtros opcionais."""
 
     sql = [
-        "SELECT pr.data_ref, p.codigo, m.nome as mercado, pr.tipo_preco, pr.preco_kg,",
-        "       pr.preco_orig, pr.unidade_orig, pr.fonte",
-        "  FROM PRICES pr",
-        "  JOIN PRODUCTS p ON p.product_id = pr.product_id",
-        "  JOIN MARKETS  m ON m.market_id = pr.market_id",
-        " WHERE 1=1",
-    ]
+    "SELECT pr.data_ref, p.codigo, p.nome as produto, m.nome as mercado, pr.tipo_preco, pr.preco_kg,",
+    "       pr.preco_orig, pr.unidade_orig, pr.fonte",
+    "  FROM PRICES pr",
+    "  JOIN PRODUCTS p ON p.product_id = pr.product_id",
+    "  JOIN MARKETS  m ON m.market_id = pr.market_id",
+    " WHERE 1=1",
+]
     params: Dict[str, Any] = {}
 
     if filtros.get("produto"):
