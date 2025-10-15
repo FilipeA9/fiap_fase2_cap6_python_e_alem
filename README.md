@@ -6,22 +6,20 @@
 
 <br>
 
-# Monitor de Preços Agro (Atacado/Varejo)
-
-## Nome do grupo
+# Monitor de Preços Agro - Módulo 1, Fase 2, Capítulo 6 - FIAP
 
 ## 👨‍🎓 Integrantes: 
-- <a href="#">Nome do integrante 1</a>
-- <a href="#">Nome do integrante 2</a>
-- <a href="#">Nome do integrante 3</a> 
-- <a href="#">Nome do integrante 4</a> 
-- <a href="#">Nome do integrante 5</a>
+- <a href="filipe09093@gmail.com">Filipe Augusto Lima Silva</a>
+- <a href="laisaandradedev@gmail.com">Laisa Cristina Capodifoglio Andrade</a>
+- <a href="johnathan.gatti@gmail.com">Johnathan da Cruz Gatti</a> 
+- <a href="diogo.zfp@gmail.com">Diogo Ferreira Pereira</a> 
+- <a href="andrevgtoledo@gmail.com">André Victor Gonçalves Toledo</a>
 
 ## 👩‍🏫 Professores:
 ### Tutor(a) 
-- <a href="#">Nome do Tutor</a>
+- <a href="profsabrina.otoni@fiap.com.br">Sabrina Otoni</a>
 ### Coordenador(a)
-- <a href="#">Nome do Coordenador</a>
+- <a href="profandre.chiovato@fiap.com.br">André Godoi Chiovato</a>
 
 
 ## 📜 Descrição
