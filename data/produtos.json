@@ -1,0 +1,10 @@
+{
+  "TOM_LV": {
+    "nome": "Tomate Longa Vida",
+    "categoria": "hortalica"
+  },
+  "MAND": {
+    "nome": "Mandioca",
+    "categoria": "tuberculo"
+  }
+}
