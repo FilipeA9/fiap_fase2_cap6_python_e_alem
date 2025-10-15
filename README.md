@@ -9,17 +9,17 @@
 # Monitor de Preços Agro - Módulo 1, Fase 2, Capítulo 6 - FIAP
 
 ## 👨‍🎓 Integrantes: 
-- <a href="filipe09093@gmail.com">Filipe Augusto Lima Silva</a>
-- <a href="laisaandradedev@gmail.com">Laisa Cristina Capodifoglio Andrade</a>
-- <a href="johnathan.gatti@gmail.com">Johnathan da Cruz Gatti</a> 
-- <a href="diogo.zfp@gmail.com">Diogo Ferreira Pereira</a> 
-- <a href="andrevgtoledo@gmail.com">André Victor Gonçalves Toledo</a>
+- Filipe Augusto Lima Silva
+- Laisa Cristina Capodifoglio Andrade
+- Johnathan da Cruz Gatti
+- Diogo Ferreira Pereira
+- André Victor Gonçalves Toledo
 
 ## 👩‍🏫 Professores:
 ### Tutor(a) 
-- <a href="profsabrina.otoni@fiap.com.br">Sabrina Otoni</a>
+- Sabrina Otoni
 ### Coordenador(a)
-- <a href="profandre.chiovato@fiap.com.br">André Godoi Chiovato</a>
+- André Godoi Chiovato
 
 
 ## 📜 Descrição
