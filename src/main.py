@@ -392,6 +392,8 @@ def main() -> None:
         elif opcao == "6":
             menu_parametros(parametros)
         elif opcao == "0":
+            if conexao:
+                db.encerrrar_conexao(conexao)
             print("Saindo...")
             break
         else:

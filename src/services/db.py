@@ -28,11 +28,18 @@ def obter_conexao() -> Iterable[Any]:
     dsn = os.getenv("DB_DSN")
     if not all([usuario, senha, dsn]):
         raise OracleIndisponivel("Variáveis de ambiente do banco não configuradas.")
+    print("Conectando ao Oracle... usuario:", usuario, "dsn:", dsn, "senha:", senha)
     conn = oracledb.connect(user=usuario, password=senha, dsn=dsn)
     try:
         yield conn
-    finally:
+    except Exception as exc2:
+        raise OracleIndisponivel("Erro ao conectar ou operar no banco Oracle.") from exc2
+
+def encerrrar_conexao(conn) -> None:
+    """Encerra a conexão Oracle."""
+    if conn:
         conn.close()
+        print("Conexão Oracle encerrada.")
 
 
 def inserir_preco_oracle(conn, registro: Dict) -> None:
