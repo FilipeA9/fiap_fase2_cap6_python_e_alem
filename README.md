@@ -8,7 +8,8 @@
 
 # Monitor de Preços Agro - Módulo 1, Fase 2, Capítulo 6 - FIAP
 
-## 👨‍🎓 Integrantes: 
+## 👨‍🎓 Integrantes:
+
 - Filipe Augusto Lima Silva
 - Laisa Cristina Capodifoglio Andrade
 - Johnathan da Cruz Gatti
@@ -16,11 +17,14 @@
 - André Victor Gonçalves Toledo
 
 ## 👩‍🏫 Professores:
-### Tutor(a) 
-- Sabrina Otoni
-### Coordenador(a)
-- André Godoi Chiovato
 
+### Tutor(a)
+
+- Sabrina Otoni
+
+### Coordenador(a)
+
+- André Godoi Chiovato
 
 ## 📜 Descrição
 
@@ -48,6 +52,7 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 ## 🔧 Como executar o código
 
 ### Pré-requisitos
+
 - Python 3.10+
 - Oracle Database (XE, Free, Autonomous ou compatível)
 - Cliente Oracle Instant Client configurado
@@ -55,12 +60,14 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 ### Instalação
 
 1. **Clonar o repositório**
+
    ```bash
    git clone <URL do repositório>
    cd monitor-precos-agro-reestruturado
    ```
 
 2. **Criar ambiente virtual e instalar dependências**
+
    ```bash
    python -m venv .venv
    source .venv/bin/activate  # No Windows: .venv\Scripts\activate
@@ -68,10 +75,12 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
    ```
 
 3. **Configurar variáveis de ambiente**
-   Copie o arquivo de exemplo da pasta `config` para a raiz do projeto com o nome `.env`.
+   Copie o arquivo de exemplo na pasta `config` para dentro da mesma pasta com o nome `.env`.
+
    ```bash
-   cp config/.env.example .env
+   cp config/.env.example config/.env
    ```
+
    Edite o arquivo `.env` com as suas credenciais de acesso ao banco de dados Oracle.
 
 4. **Setup do Banco de Dados**
@@ -87,14 +96,14 @@ python -m src.main
 
 ## 🗃 Histórico de lançamentos
 
-* 0.1.0 - 09/10/2025
-    * Desenvolvimento da primeira versão do projeto.
+- 0.1.0 - 09/10/2025
 
-* 0.1.1 - 15/10/2025
-    * Reestruturação inicial do repositório para o padrão FIAP.
-    * Ajuste de caminhos e configuração.
+  - Desenvolvimento da primeira versão do projeto.
+
+- 0.1.1 - 15/10/2025
+  - Reestruturação inicial do repositório para o padrão FIAP.
+  - Ajuste de caminhos e configuração.
 
 ## 📋 Licença
 
 <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1"><p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="https://github.com/agodoi/template">MODELO GIT FIAP</a> por <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://fiap.com.br">Fiap</a> está licenciado sobre <a href="http://creativecommons.org/licenses/by/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">Attribution 4.0 International</a>.</p>
-

@@ -50,9 +50,10 @@ As tabelas e restrições estão definidas em [`schema.sql`](schema.sql):
 ## Configuração do Ambiente
 
 1. **Pré-requisitos**
+
    - Python 3.10+
    - Oracle Database (XE, Free, Autonomous ou compatível). Exemplos: Oracle XE 21c com serviço `XEPDB1` ou Free `FREEPDB1`.
-   - Oracle SQL Developer para executar o `schema.sql` (opcionalmente SQL*Plus).
+   - Oracle SQL Developer para executar o `schema.sql` (opcionalmente SQL\*Plus).
 
 2. **Clonar o repositório**
 
@@ -82,7 +83,7 @@ As tabelas e restrições estão definidas em [`schema.sql`](schema.sql):
 5. **Parâmetros de negócio**
 
    - `data/unidades.json`: fatores de conversão para kg (`{"cx23kg": 23, "duzia": 12, ...}`)
-   - `data/parametros.json` (opcional): ajuste de janela da média, z-score limite e limiar de queda. Exemplo:
+   - `config/parametros.json` (opcional): ajuste de janela da média, z-score limite e limiar de queda. Exemplo:
 
      ```json
      {
@@ -229,12 +230,12 @@ Os testes cobrem funções críticas de cálculo e validação.
 
 ## Troubleshooting
 
-| Problema | Diagnóstico | Solução |
-|----------|-------------|---------|
-| **Erro de conexão Oracle** | Mensagem "Driver Oracle não disponível" ou credenciais inválidas | Instale o cliente Instant Client, confira DSN e variáveis no `.env` |
-| **Unidade inválida** | "Unidade desconhecida" ao registrar preço | Consulte e ajuste `data/unidades.json` |
-| **Deduplicação** | "Já existe registro" | Verifique se a combinação data/produto/mercado/tipo já foi cadastrada |
-| **Sem exportação** | Opção 5 não gera arquivos | Realize uma consulta (opção 4) antes de exportar |
+| Problema                   | Diagnóstico                                                      | Solução                                                               |
+| -------------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------- |
+| **Erro de conexão Oracle** | Mensagem "Driver Oracle não disponível" ou credenciais inválidas | Instale o cliente Instant Client, confira DSN e variáveis no `.env`   |
+| **Unidade inválida**       | "Unidade desconhecida" ao registrar preço                        | Consulte e ajuste `data/unidades.json`                                |
+| **Deduplicação**           | "Já existe registro"                                             | Verifique se a combinação data/produto/mercado/tipo já foi cadastrada |
+| **Sem exportação**         | Opção 5 não gera arquivos                                        | Realize uma consulta (opção 4) antes de exportar                      |
 
 Os logs detalhados ficam em `logs/operacoes.txt`.
 
