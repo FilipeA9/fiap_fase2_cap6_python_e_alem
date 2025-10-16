@@ -106,7 +106,7 @@ def registrar_preco(
     dados["registros_existentes"] = existentes
 
     try:
-        validacao.validar_registro(dados, produtos, mercados, fatores)
+        validacao.validar_registro(dados, produtos, mercados, fatores, conexao)
     except ValueError as exc:
         print(f"Erro de validação: {exc}")
         arquivos.registrar_log("REGISTRAR_PRECO", "ERRO", str(exc))
